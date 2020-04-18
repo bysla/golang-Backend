@@ -2,7 +2,6 @@ package dataBase
 
 import (
 	"database/sql"
-	"util"
 
 	_ "github.com/mattn/go-sqlite3"
 )
@@ -22,11 +21,14 @@ func CreateDB() {
 
 	Statement.Exec()
 
-	//database, _ := sql.Open("sqlite3","./data/data.db")
-}
+	Statement, _ = Database.Prepare("CREATE TABLE IF NOT EXISTS incidents" +
+		"(id INTEGER PRIMARY KEY AUTO_INCREMENT," +
+		" title TEXT NOT NULL," +
+		" description TEXT NOT NULL," +
+		" value TEXT NOT NULL," +
+		" ong_id TEXT NOT NULL)")
 
-func InsertOngs(name string, email string, whatsapp string, city string, uf string) {
-	id, _ := util.RandomHex(4)
-	Statement, _ = Database.Prepare("INSERT INTO ongs (id,name,email,whatsapp,city,uf) VALUES(?,?,?,?,?,?)")
-	Statement.Exec(id, name, email, whatsapp, city, uf)
+	Statement.Exec()
+
+	//database, _ := sql.Open("sqlite3","./data/data.db")
 }
