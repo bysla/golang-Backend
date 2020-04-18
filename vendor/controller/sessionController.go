@@ -4,6 +4,7 @@ import (
 	"dataBase"
 	"encoding/json"
 	"fmt"
+	"io/ioutil"
 	"net/http"
 )
 
@@ -47,8 +48,28 @@ func SelectIncidents(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-func InsertOngs(w http.ResponseWriter, r *http.Request) {
-	//w.Header().Set("Content-Type", "application/json")
-	r.ParseForm()
+var results []string
 
+func InsertOngs(w http.ResponseWriter, r *http.Request) {
+
+	ong_id := r.Header.Get("Authorization")
+	body, err := ioutil.ReadAll(r.Body)
+
+	if err != nil {
+		http.Error(w, "Error reading request body",
+			http.StatusInternalServerError)
+	}
+
+	keyVal := make(map[string]string)
+	json.Unmarshal(body, &keyVal)
+
+	title := keyVal["title"]
+	description := keyVal["description"]
+	value := keyVal["value"]
+
+	fmt.Println(title)
+	fmt.Println(description)
+	fmt.Println(value)
+
+	dataBase.InsertIncidents(title, description, value, ong_id)
 }
