@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"io/ioutil"
 	"net/http"
+	"strconv"
 )
 
 func SessionRou(w http.ResponseWriter, r *http.Request) {
@@ -48,9 +49,35 @@ func SelectIncidents(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
+func SelectAIncidents(w http.ResponseWriter, r *http.Request) {
+	if r.Method == "GET" {
+		ong_id := r.Header.Get("Authorization")
+		test1, err := json.Marshal(dataBase.SelectAIncidents(ong_id))
+		if err != nil {
+			return
+		}
+
+		fmt.Println(string(test1)) //ele printa como [{},{},{},....{}]
+
+		fmt.Fprintln(w, string(test1))
+	} else {
+		http.Error(w, "Invalid request method.", 405)
+	}
+}
+
+func DeleteAIncidents(w http.ResponseWriter, r *http.Request) {
+
+	ong_id := r.Header.Get("Authorization")
+
+	ids := r.URL.Query().Get("id")
+	id, _ := strconv.Atoi(ids)
+	dataBase.DeleteIncidents(id, ong_id)
+
+}
+
 var results []string
 
-func InsertOngs(w http.ResponseWriter, r *http.Request) {
+func InsertIncidents(w http.ResponseWriter, r *http.Request) {
 
 	ong_id := r.Header.Get("Authorization")
 	body, err := ioutil.ReadAll(r.Body)
@@ -71,5 +98,28 @@ func InsertOngs(w http.ResponseWriter, r *http.Request) {
 	fmt.Println(description)
 	fmt.Println(value)
 
-	dataBase.InsertIncidents(title, description, value, ong_id)
+	var id int = dataBase.InsertIncidents(title, description, value, ong_id)
+	fmt.Fprintf(w, `{"id":"%d"}`, id)
+}
+
+func InsertOngs(w http.ResponseWriter, r *http.Request) {
+
+	body, err := ioutil.ReadAll(r.Body)
+
+	if err != nil {
+		http.Error(w, "Error reading request body",
+			http.StatusInternalServerError)
+	}
+
+	keyVal := make(map[string]string)
+	json.Unmarshal(body, &keyVal)
+
+	name := keyVal["name"]
+	email := keyVal["email"]
+	whatsapp := keyVal["whatsapp"]
+	city := keyVal["city"]
+	uf := keyVal["uf"]
+
+	var id string = dataBase.InsertOngs(name, email, whatsapp, city, uf)
+	fmt.Fprintf(w, `{"id":"%s"}`, id)
 }

@@ -12,13 +12,13 @@ func RouthsP() {
 
 	MyRouter.HandleFunc("/session", controller.SessionRou).Methods("POST")
 
-	MyRouter.HandleFunc("/ongs", controller.SessionRou).Methods("POST")
+	MyRouter.HandleFunc("/ongs", controller.InsertOngs).Methods("POST")
 	MyRouter.HandleFunc("/ongs", controller.SelectOngs).Methods("GET")
 
-	MyRouter.HandleFunc("/profile", controller.InsertOngs).Methods("GET")
+	MyRouter.HandleFunc("/profile", controller.SelectAIncidents).Methods("GET")
 
-	MyRouter.HandleFunc("/incidents", controller.InsertOngs).Methods("POST")
+	MyRouter.HandleFunc("/incidents", controller.InsertIncidents).Methods("POST")
 	MyRouter.HandleFunc("/incidents", controller.SelectIncidents).Methods("GET")
-	MyRouter.HandleFunc("/incidents", controller.SessionRou).Methods("DELETE")
+	MyRouter.HandleFunc("/incidents", controller.DeleteAIncidents).Methods("DELETE")
 
 }

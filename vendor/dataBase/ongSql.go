@@ -14,10 +14,12 @@ type DadoOngs struct {
 	Uf       string
 }
 
-func InsertOngs(name string, email string, whatsapp string, city string, uf string) {
+func InsertOngs(name string, email string, whatsapp string, city string, uf string) string {
 	id, _ := util.RandomHex(4)
 	Statement, _ = Database.Prepare("INSERT INTO ongs (id,name,email,whatsapp,city,uf) VALUES(?,?,?,?,?,?)")
 	Statement.Exec(id, name, email, whatsapp, city, uf)
+
+	return id
 }
 
 func SelectOngs() []DadoOngs {
