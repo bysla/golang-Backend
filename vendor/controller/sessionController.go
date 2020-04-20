@@ -34,35 +34,33 @@ func SelectOngs(w http.ResponseWriter, r *http.Request) {
 }
 
 func SelectIncidents(w http.ResponseWriter, r *http.Request) {
-	if r.Method == "GET" {
 
-		test1, err := json.Marshal(dataBase.SelectIncidents())
-		if err != nil {
-			return
-		}
-
-		fmt.Println(string(test1)) //ele printa como [{},{},{},....{}]
-
-		fmt.Fprintln(w, string(test1))
-	} else {
-		http.Error(w, "Invalid request method.", 405)
+	page := r.URL.Query().Get("page")
+	if page == "" {
+		page = "1"
 	}
+	n, _ := strconv.Atoi(page)
+	test1, err := json.Marshal(dataBase.SelectIncidents(n))
+	if err != nil {
+		return
+	}
+
+	fmt.Fprintln(w, string(test1))
+
 }
 
 func SelectAIncidents(w http.ResponseWriter, r *http.Request) {
-	if r.Method == "GET" {
-		ong_id := r.Header.Get("Authorization")
-		test1, err := json.Marshal(dataBase.SelectAIncidents(ong_id))
-		if err != nil {
-			return
-		}
 
-		fmt.Println(string(test1)) //ele printa como [{},{},{},....{}]
-
-		fmt.Fprintln(w, string(test1))
-	} else {
-		http.Error(w, "Invalid request method.", 405)
+	ong_id := r.Header.Get("Authorization")
+	test1, err := json.Marshal(dataBase.SelectAIncidents(ong_id))
+	if err != nil {
+		return
 	}
+
+	fmt.Println(string(test1)) //ele printa como [{},{},{},....{}]
+
+	fmt.Fprintln(w, string(test1))
+
 }
 
 func DeleteAIncidents(w http.ResponseWriter, r *http.Request) {

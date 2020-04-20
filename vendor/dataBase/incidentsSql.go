@@ -30,9 +30,11 @@ func InsertIncidents(title string, description string, value string, ong_id stri
 	return id
 }
 
-func SelectIncidents() []DadoIncidents {
-	SQL := `SELECT * FROM incidents`
-	rows, err := Database.Query(SQL)
+func SelectIncidents(page int) []DadoIncidents {
+	var pages int = ((page - 1) * 5)
+
+	SQL := `SELECT * FROM incidents LIMIT ? OFFSET ?`
+	rows, err := Database.Query(SQL, 5, pages)
 	if err != nil {
 		log.Println(err)
 	}
