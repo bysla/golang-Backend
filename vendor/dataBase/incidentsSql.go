@@ -58,8 +58,8 @@ func SelectIncidents(page int) []DadoIncidents {
 }
 
 func SelectAIncidents(ongId string) []DadoIncidents {
-	SQL := `SELECT * FROM incidents where ong_id = ` + ongId
-	rows, err := Database.Query(SQL)
+	SQL := `SELECT * FROM incidents where ong_id = ?`
+	rows, err := Database.Query(SQL, ongId)
 	if err != nil {
 		log.Println(err)
 	}
@@ -83,8 +83,6 @@ func SelectAIncidents(ongId string) []DadoIncidents {
 }
 
 func DeleteIncidents(id int, ong_id string) {
-	//SQL := `DELETE FROM incidents WHERE id = '` + string(id) + `' and ong_id = '` + ong_id + `'`
-	Statement, _ = Database.Prepare("DELETE FROM incidents WHERE id =? and ong_id = ?")
+	Statement, _ = Database.Prepare("DELETE FROM incidents WHERE id = ? and ong_id = ?")
 	Statement.Exec(id, ong_id)
-
 }

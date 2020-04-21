@@ -10,7 +10,7 @@ var MyRouter = mux.NewRouter().StrictSlash(true)
 
 func RouthsP() {
 
-	MyRouter.HandleFunc("/session", controller.SessionRou).Methods("POST")
+	MyRouter.HandleFunc("/session", controller.Session).Methods("POST")
 
 	MyRouter.HandleFunc("/ongs", controller.InsertOngs).Methods("POST")
 	MyRouter.HandleFunc("/ongs", controller.SelectOngs).Methods("GET")

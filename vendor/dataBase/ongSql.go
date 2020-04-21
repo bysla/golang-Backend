@@ -46,3 +46,21 @@ func SelectOngs() []DadoOngs {
 	return listaOngs
 
 }
+
+func SelectAOngs(ongId string) string {
+	SQL := `SELECT * FROM ongs WHERE id = ? LIMIT 1 `
+	rows, err := Database.Query(SQL, ongId)
+	if err != nil {
+		log.Println(err)
+	}
+
+	var id, name, email, whatsapp, city, uf string
+	var nome string
+
+	for rows.Next() {
+		rows.Scan(&id, &name, &email, &whatsapp, &city, &uf)
+		nome = name
+	}
+	return nome
+
+}
