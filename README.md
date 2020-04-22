@@ -1,1 +1,1 @@
-a simple back-end test in golang
+a simple back-end test in golang based on a nodejs project called [be the hero](https://github.com/bysla/by-the-hero).
